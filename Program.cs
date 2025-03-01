@@ -73,7 +73,10 @@ namespace ToyRobot
         {
             // Cannot move if not placed
             if (!IsPlaced())
+            {
+                Console.WriteLine("Robot not placed");
                 return false;
+            }    
 
             // Calculate new position based on current direction
             int newX = _x.Value;
@@ -104,7 +107,32 @@ namespace ToyRobot
             }
 
             // Return false if move would cause robot to fall
+            Console.WriteLine("Move would cause robot to fall");
             return false;
+        }
+
+
+        // Rotate the robot 90 degrees counterclockwise
+        // True if rotation was successful, false if not placed
+        public bool Left()
+        {
+            if (!IsPlaced())
+            {
+                Console.WriteLine("Robot not placed");
+                return false;
+            }
+
+            // Update direction using switch expression
+            _f = _f.Value switch
+            {
+                Direction.NORTH => Direction.WEST,
+                Direction.EAST => Direction.NORTH,
+                Direction.SOUTH => Direction.EAST,
+                Direction.WEST => Direction.SOUTH,
+                _ => _f
+            };
+
+            return true;
         }
     }
 

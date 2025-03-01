@@ -106,14 +106,14 @@ namespace ToyRobot
                 return true;
             }
 
-            // Return false if move would cause robot to fall
-            Console.WriteLine("Move would cause robot to fall");
+            // Return false if move will cause robot to fall
+            Console.WriteLine("Move will cause robot to fall");
             return false;
         }
 
 
         // Rotate the robot 90 degrees counterclockwise
-        // True if rotation was successful, false if not placed
+        // return True if rotation was successful, false if robot not placed
         public bool Left()
         {
             if (!IsPlaced())
@@ -134,8 +134,30 @@ namespace ToyRobot
 
             return true;
         }
-    }
 
+        // Rotate the robot 90 degrees clockwise
+        // returns True if rotation was successful, false if robot not placed
+        public bool Right()
+        {
+            if (!IsPlaced())
+            {
+                Console.WriteLine("Robot not placed");
+                return false;
+            }
+
+            // Update direction using switch expression
+            _f = _f.Value switch
+            {
+                Direction.NORTH => Direction.EAST,
+                Direction.EAST => Direction.SOUTH,
+                Direction.SOUTH => Direction.WEST,
+                Direction.WEST => Direction.NORTH,
+                _ => _f
+            };
+
+            return true;
+        }
+    }
 
 
     // Process text commands and direct them to the robot
@@ -166,6 +188,7 @@ namespace ToyRobot
             // Process based on command type
             switch (action)
             {
+                // place robot
                 case "PLACE":
                     // Validate PLACE command format
                     if (parts.Length != 2)
@@ -185,10 +208,22 @@ namespace ToyRobot
                     _robot.Place(x, y, facing);
                     return string.Empty;
 
+                // move robot by one step
                 case "MOVE":
                     _robot.Move();
                     return string.Empty;
 
+                // rotate robot 90 degrees to the left
+                case "LEFT":
+                    _robot.Left();
+                    return string.Empty;
+
+                // rotate robot 90 degrees to the right
+                case "RIGHT":
+                    _robot.Right();
+                    return string.Empty;
+
+                // cannot recognise command
                 default:
                     return "Unknown command";
             }

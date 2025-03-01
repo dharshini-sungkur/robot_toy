@@ -1,0 +1,207 @@
+using System;
+using System.Collections.Generic;
+
+namespace ToyRobot
+{
+    public enum Direction
+    {
+        NORTH,
+        EAST,
+        SOUTH,
+        WEST
+    }
+
+    public class Robot
+    {
+        private int? _x;
+        private int? _y;
+        private Direction? _facing;
+        private readonly int _tableSizeX;
+        private readonly int _tableSizeY;
+
+        public Robot(int tableSizeX = 5, int tableSizeY = 5)
+        {
+            _tableSizeX = tableSizeX;
+            _tableSizeY = tableSizeY;
+        }
+
+        public bool Place(int x, int y, Direction facing)
+        {
+            if (IsValidPosition(x, y))
+            {
+                _x = x;
+                _y = y;
+                _facing = facing;
+                return true;
+            }
+            return false;
+        }
+
+        public bool Move()
+        {
+            if (!IsPlaced())
+                return false;
+
+            int newX = _x.Value;
+            int newY = _y.Value;
+
+            switch (_facing)
+            {
+                case Direction.NORTH:
+                    newY += 1;
+                    break;
+                case Direction.EAST:
+                    newX += 1;
+                    break;
+                case Direction.SOUTH:
+                    newY -= 1;
+                    break;
+                case Direction.WEST:
+                    newX -= 1;
+                    break;
+            }
+
+            if (IsValidPosition(newX, newY))
+            {
+                _x = newX;
+                _y = newY;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Left()
+        {
+            if (!IsPlaced())
+                return false;
+
+            _facing = _facing.Value switch
+            {
+                Direction.NORTH => Direction.WEST,
+                Direction.EAST => Direction.NORTH,
+                Direction.SOUTH => Direction.EAST,
+                Direction.WEST => Direction.SOUTH,
+                _ => _facing
+            };
+
+            return true;
+        }
+
+        public bool Right()
+        {
+            if (!IsPlaced())
+                return false;
+
+            _facing = _facing.Value switch
+            {
+                Direction.NORTH => Direction.EAST,
+                Direction.EAST => Direction.SOUTH,
+                Direction.SOUTH => Direction.WEST,
+                Direction.WEST => Direction.NORTH,
+                _ => _facing
+            };
+
+            return true;
+        }
+
+        public string Report()
+        {
+            if (!IsPlaced())
+                return "Robot not placed on table";
+
+            return $"{_x}, {_y}, {_facing}";
+        }
+
+        private bool IsPlaced()
+        {
+            return _x.HasValue && _y.HasValue && _facing.HasValue;
+        }
+
+        private bool IsValidPosition(int x, int y)
+        {
+            return x >= 0 && x < _tableSizeX && y >= 0 && y < _tableSizeY;
+        }
+    }
+
+    public class CommandProcessor
+    {
+        private readonly Robot _robot;
+
+        public CommandProcessor(Robot robot)
+        {
+            _robot = robot ?? throw new ArgumentNullException(nameof(robot));
+        }
+
+        public string ProcessCommand(string command)
+        {
+            if (string.IsNullOrWhiteSpace(command))
+                return string.Empty;
+
+            string[] parts = command.Trim().Split(' ', 2);
+            string action = parts[0].ToUpper();
+
+            switch (action)
+            {
+                case "PLACE":
+                    if (parts.Length != 2)
+                        return "Invalid PLACE command";
+
+                    string[] parameters = parts[1].Split(',');
+                    if (parameters.Length != 3)
+                        return "Invalid PLACE parameters";
+
+                    if (!int.TryParse(parameters[0], out int x) || 
+                        !int.TryParse(parameters[1], out int y) || 
+                        !Enum.TryParse(parameters[2], true, out Direction facing))
+                        return "Invalid PLACE parameters format";
+
+                    _robot.Place(x, y, facing);
+                    return string.Empty;
+
+                case "MOVE":
+                    _robot.Move();
+                    return string.Empty;
+
+                case "LEFT":
+                    _robot.Left();
+                    return string.Empty;
+
+                case "RIGHT":
+                    _robot.Right();
+                    return string.Empty;
+
+                case "REPORT":
+                    return _robot.Report();
+
+                default:
+                    return "Unknown command";
+            }
+        }
+    }
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("Toy Robot Simulator");
+            Console.WriteLine("Commands: PLACE X,Y,FACING | MOVE | LEFT | RIGHT | REPORT | EXIT");
+            
+            Robot robot = new Robot();
+            CommandProcessor processor = new CommandProcessor(robot);
+            
+            while (true)
+            {
+                Console.Write("> ");
+                string input = Console.ReadLine();
+                
+                if (input?.ToUpper() == "EXIT")
+                    break;
+                
+                string result = processor.ProcessCommand(input);
+                if (!string.IsNullOrEmpty(result))
+                    Console.WriteLine(result);
+            }
+        }
+    }
+}

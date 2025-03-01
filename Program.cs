@@ -17,9 +17,9 @@ namespace ToyRobot
     public class Robot
     {
         // Robot position and direction
-        private int _x;             // x-coordinate of robot
-        private int _y;             // y-coordinate of robot
-        private Direction _f;       // direction robot is facing
+        private int? _x;             // x-coordinate of robot
+        private int? _y;             // y-coordinate of robot
+        private Direction? _f;       // direction robot is facing
         
         // Table dimensions
         private readonly int _tableSizeX; // width of table (X-axis)
@@ -50,6 +50,14 @@ namespace ToyRobot
             return false;
         }
 
+        // Check if the robot has been placed on the table
+        // return True if the robot is placed, otherwise false
+        private bool IsPlaced()
+        {
+            return _x.HasValue && _y.HasValue && _f.HasValue;
+        }
+
+
         // Validate if a position is within the table boundaries
         // parameter name="x" X-coordinate to check
         // parameter name="y" Y-coordinate to check
@@ -57,6 +65,46 @@ namespace ToyRobot
         private bool IsValidPosition(int x, int y)
         {
             return x >= 0 && x < _tableSizeX && y >= 0 && y < _tableSizeY;
+        }
+
+        // Moves the robot one unit forward in the direction it is facing
+        // returns True if move was successful, false if not placed or would fall off table
+        public bool Move()
+        {
+            // Cannot move if not placed
+            if (!IsPlaced())
+                return false;
+
+            // Calculate new position based on current direction
+            int newX = _x.Value;
+            int newY = _y.Value;
+
+            switch (_f)
+            {
+                case Direction.NORTH:
+                    newY += 1;
+                    break;
+                case Direction.EAST:
+                    newX += 1;
+                    break;
+                case Direction.SOUTH:
+                    newY -= 1;
+                    break;
+                case Direction.WEST:
+                    newX -= 1;
+                    break;
+            }
+
+            // Only update position if new position is valid
+            if (IsValidPosition(newX, newY))
+            {
+                _x = newX;
+                _y = newY;
+                return true;
+            }
+
+            // Return false if move would cause robot to fall
+            return false;
         }
     }
 
@@ -105,10 +153,13 @@ namespace ToyRobot
                         !Enum.TryParse(parameters[2], true, out Direction facing))
                         return "Invalid PLACE parameters format";
 
-                    // Execute placement
+                    // Execute placement of robot
                     _robot.Place(x, y, facing);
                     return string.Empty;
 
+                case "MOVE":
+                    _robot.Move();
+                    return string.Empty;
 
                 default:
                     return "Unknown command";
@@ -123,7 +174,7 @@ namespace ToyRobot
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Toy Robot");
+            Console.WriteLine("\nToy Robot");
             // create a new robot object
             Robot robot = new Robot();
             // create a new command object

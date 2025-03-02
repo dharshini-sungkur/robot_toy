@@ -12,7 +12,6 @@ XUnit is used as the testing framework and include standard assertions to valida
 # RobotTests Class
 ## PlaceValid_Pass
 Validates that a robot can be placed at a valid position on the table.
-**Steps:**
 1. Create a new robot
 2. Place the robot at position (0,0) facing NORTH
 3. Verify the placement was successful (returns true)
@@ -20,7 +19,6 @@ Validates that a robot can be placed at a valid position on the table.
 
 ## PlaceInvalid_Fail
 Ensures that placing a robot outside the table boundaries fails.
-**Steps:**
 1. Create a new robot
 2. Attempt to place the robot at an invalid position (-1,0) facing NORTH
 3. Verify the placement fails (returns false)
@@ -28,7 +26,6 @@ Ensures that placing a robot outside the table boundaries fails.
 
 ## MoveValid
 Validates that a robot can move one unit forward when the move is valid.
-**Steps:**
 1. Create a new robot
 2. Place the robot at position (0,0) facing NORTH
 3. Move the robot forward
@@ -37,7 +34,6 @@ Validates that a robot can move one unit forward when the move is valid.
 
 ## MoveInvalid
 Ensures that the robot cannot fall off the table edge.
-**Steps:**
 1. Create a new robot
 2. Place the robot at position (0,0) facing SOUTH
 3. Redirect console output to capture warning messages
@@ -48,7 +44,6 @@ Ensures that the robot cannot fall off the table edge.
 
 ## Left_Pass
 Validates that the robot can rotate 90° anticlockwise.
-**Steps:**
 1. Create a new robot
 2. Place the robot at position (0,0) facing NORTH
 3. Rotate the robot left
@@ -56,7 +51,6 @@ Validates that the robot can rotate 90° anticlockwise.
 
 ## Right_Pass
 Validates that the robot can rotate 90° clockwise.
-**Steps:**
 1. Create a new robot
 2. Place the robot at position (0,0) facing NORTH
 3. Rotate the robot right
@@ -64,7 +58,6 @@ Validates that the robot can rotate 90° clockwise.
 
 ## UnplacedRobot
 Ensures that operations on an unplaced robot are rejected.
-**Steps:**
 1. Create a new robot (without placing it)
 2. Redirect console output to capture warning messages
 3. Attempt to move, rotate left, and rotate right
@@ -74,14 +67,12 @@ Ensures that operations on an unplaced robot are rejected.
 
 ## MultipleCommands
 Validates that the robot behaves correctly when given a sequence of commands.
-**Steps:**
 1. Create a new robot
 2. Execute a sequence of commands (PLACE 1,2,EAST; MOVE; MOVE; LEFT; MOVE)
 3. Verify the final position and direction is "3, 3, NORTH"
 
 ## MoveInEachDirection
 Ensures the robot moves correctly in all four directions.
-**Steps:**
 1. Create a new robot
 2. Place the robot at position (2,2) facing NORTH
 3. Move north and verify position
@@ -92,7 +83,6 @@ Ensures the robot moves correctly in all four directions.
 # CommandsProcessorTests Class
 ## ProcessPlaceCommand_ValidFormat
 Validates that the command processor handles valid PLACE commands.
-**Steps:**
 1. Create a robot and command processor
 2. Process a "PLACE 0,0,NORTH" command
 3. Verify the command returns empty string (success)
@@ -100,21 +90,18 @@ Validates that the command processor handles valid PLACE commands.
 
 ## ProcessPlaceCommand_InvalidFormat
 Ensures that malformed PLACE commands are rejected.
-**Steps:**
 1. Create a robot and command processor
 2. Process an invalid "PLACE 0,NORTH" command
 3. Verify the result contains "Invalid"
 
 ## ProcessPlaceCommand_InvalidCoordinates
 Validates that PLACE commands with out-of-bounds coordinates are rejected.
-**Steps:**
 1. Create a robot and command processor
 2. Process a "PLACE 10,10,NORTH" command (outside table boundaries)
 3. Verify the robot reports "Robot not placed on table"
 
 ## ProcessMoveCommand_AfterValidPlacement
 Validates MOVE command execution after a valid placement.
-**Steps:**
 1. Create a robot and command processor
 2. Place the robot at (0,0) facing NORTH
 3. Process a "MOVE" command
@@ -123,7 +110,6 @@ Validates MOVE command execution after a valid placement.
 
 ## ProcessReportCommand
 Ensures the REPORT command returns the robot's position correctly.
-**Steps:**
 1. Create a robot and command processor
 2. Place the robot at (2,3) facing WEST
 3. Process a "REPORT" command
@@ -131,14 +117,12 @@ Ensures the REPORT command returns the robot's position correctly.
 
 ## ProcessCommandsSequence
 Validates the robot follows sequences of commands correctly.
-**Steps:**
 1. Create a robot and command processor
 2. Process three separate command sequences from the requirements
 3. Verify each sequence results in the expected position and direction
 
 ## CommandsBeforePlacement
 Ensures commands before a valid placement are ignored.
-**Steps:**
 1. Create a robot and command processor
 2. Redirect console output to capture messages
 3. Process MOVE, LEFT, RIGHT, REPORT commands before placing the robot
@@ -148,14 +132,13 @@ Ensures commands before a valid placement are ignored.
 
 ## ProcessUnknownCommand
 Validates that unknown commands are rejected with an error.
-**Steps:**
 1. Create a robot and command processor
 2. Process an unknown "JUMP" command
 3. Verify the result contains "Unknown command"
 
+
 # Running the Tests
 To run the tests, use the .NET CLI:
-
 ```
 cd Tests
 dotnet test

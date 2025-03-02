@@ -157,6 +157,16 @@ namespace ToyRobot
 
             return true;
         }
+
+        // Report the current position and direction of the robot
+        // String representation of position and direction, or error message if not placed
+        public string Report()
+        {
+            if (!IsPlaced())
+                return "Robot not placed on table";
+
+            return $"{_x}, {_y}, {_f}";
+        }
     }
 
 
@@ -223,6 +233,10 @@ namespace ToyRobot
                     _robot.Right();
                     return string.Empty;
 
+                // report robot position and direction
+                case "REPORT":
+                    return _robot.Report();
+                    
                 // cannot recognise command
                 default:
                     return "Unknown command";
@@ -280,7 +294,7 @@ namespace ToyRobot
             }
             
             // Allow all commands
-            Console.WriteLine("Commands: PLACE X,Y,FACING | MOVE | LEFT | RIGHT | REPORT | EXIT");
+            Console.WriteLine("Commands: MOVE | LEFT | RIGHT | REPORT | EXIT");
             
             while (true)
             {

@@ -13,3 +13,9 @@
 /Users/dharshini/Documents/assignment/icwa/obj/Debug/net9.0/app.pdb
 /Users/dharshini/Documents/assignment/icwa/obj/Debug/net9.0/app.genruntimeconfig.cache
 /Users/dharshini/Documents/assignment/icwa/obj/Debug/net9.0/ref/app.dll
+/Users/dharshini/Documents/assignment/icwa/bin/Debug/net9.0/xunit.abstractions.dll
+/Users/dharshini/Documents/assignment/icwa/bin/Debug/net9.0/xunit.assert.dll
+/Users/dharshini/Documents/assignment/icwa/bin/Debug/net9.0/xunit.core.dll
+/Users/dharshini/Documents/assignment/icwa/bin/Debug/net9.0/xunit.execution.dotnet.dll
+/Users/dharshini/Documents/assignment/icwa/obj/Debug/net9.0/app.csproj.AssemblyReference.cache
+/Users/dharshini/Documents/assignment/icwa/obj/Debug/net9.0/app.csproj.Up2Date
